@@ -37,7 +37,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Background Job Creation
-var backgroundJobs = app.Services.GetRequiredService<IBackgroundJobClient>();
-backgroundJobs.Enqueue(() => Console.WriteLine("Background Job Runned"));
+app.Services.GetRequiredService<IBackgroundJobClient>();
 
 app.Run();
