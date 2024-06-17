@@ -1,3 +1,4 @@
+using hangfire.web.api.v1.Filters;
 using Hangfire;
 using Hangfire.MemoryStorage;
 
@@ -13,6 +14,9 @@ builder.Services.AddHangfire(config =>
     .UseSimpleAssemblyNameTypeSerializer()
     .UseDefaultTypeSerializer()
     .UseMemoryStorage());
+
+// Hangfire Job Filter
+GlobalJobFilters.Filters.Add(new LogJobFilter());
 
 // Adding Hangfire Server
 builder.Services.AddHangfireServer();
@@ -38,5 +42,15 @@ app.MapControllers();
 
 // Background Job Creation
 app.Services.GetRequiredService<IBackgroundJobClient>();
+
+
+// Adding Hangifre Dashboard
+//app.UseHangfireDashboard("/hangfire");
+
+// Adding Hangifre Dashboard with Authorization
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new JobsAuthorizationFilter() }
+});
 
 app.Run();
