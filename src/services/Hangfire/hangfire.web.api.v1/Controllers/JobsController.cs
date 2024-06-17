@@ -15,7 +15,9 @@ namespace hangfire.web.api.v1.Controllers
             _backgroundJobClient = backgroundJobClient;
         }
 
-        // Fire-and-Forget Job
+        /// <summary>
+        /// Enqueues a fire-and-forget job to the background job client.
+        /// </summary>
         [HttpPost("enqueue")]
         public IActionResult EnqueueJob()
         {
@@ -23,7 +25,9 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Job has been added to the queue.");
         }
 
-        // Delayed Job
+        /// <summary>
+        /// Schedules a job to be executed after a specified delay.
+        /// </summary>
         [HttpPost("schedule")]
         public IActionResult ScheduleJob()
         {
@@ -31,7 +35,9 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Job has been scheduled to run after 1 minute.");
         }
 
-        // Recurring Job
+        /// <summary>
+        /// Adds or updates a recurring job that executes daily.
+        /// </summary>
         [HttpPost("recurring/addOrUpdate")]
         public IActionResult AddOrUpdateRecurringJob()
         {
@@ -39,7 +45,9 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Recurring job has been added or updated.");
         }
 
-        // Continuation Job
+        /// <summary>
+        /// Enqueues a job and then schedules a continuation job to run after it completes.
+        /// </summary>
         [HttpPost("continueWith")]
         public IActionResult ContinueWithJob()
         {
@@ -48,7 +56,9 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Continuation job has been executed.");
         }
 
-        // Remove Recurring Job If Exists
+        /// <summary>
+        /// Removes a recurring job if it exists.
+        /// </summary>
         [HttpPost("recurring/removeIfExists")]
         public IActionResult RemoveRecurringJobIfExists()
         {
@@ -56,7 +66,10 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Recurring job has been removed if it existed.");
         }
 
-        // Delete Job
+        /// <summary>
+        /// Deletes a job by its ID.
+        /// </summary>
+        /// <param name="jobId">The ID of the job to delete.</param>
         [HttpPost("delete")]
         public IActionResult DeleteJob([FromBody] string jobId)
         {
@@ -64,7 +77,10 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Job has been deleted.");
         }
 
-        // Requeue Job
+        /// <summary>
+        /// Requeues a job by its ID.
+        /// </summary>
+        /// <param name="jobId">The ID of the job to requeue.</param>
         [HttpPost("requeue")]
         public IActionResult RequeueJob([FromBody] string jobId)
         {
@@ -72,7 +88,9 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Job has been requeued.");
         }
 
-        // Custom Recurring Job
+        /// <summary>
+        /// Adds or updates a custom recurring job that executes every minute.
+        /// </summary>
         [HttpPost("recurring/custom")]
         public IActionResult CustomRecurringJob()
         {
@@ -80,6 +98,9 @@ namespace hangfire.web.api.v1.Controllers
             return Ok("Custom recurring job has been added.");
         }
 
+        /// <summary>
+        /// Enqueues a cancellable job to the background job client.
+        /// </summary>
         [HttpPost("enqueue/cancellable")]
         public IActionResult EnqueueCancellableJob()
         {
@@ -87,6 +108,10 @@ namespace hangfire.web.api.v1.Controllers
             return Ok($"Cancellable job has been added to the queue with ID: {jobId}");
         }
 
+        /// <summary>
+        /// Deletes a scheduled job by its ID.
+        /// </summary>
+        /// <param name="jobId">The ID of the scheduled job to delete.</param>
         [HttpPost("delete/scheduled")]
         public IActionResult DeleteScheduledJob([FromBody] string jobId)
         {
@@ -94,6 +119,9 @@ namespace hangfire.web.api.v1.Controllers
             return result ? Ok("Scheduled job has been deleted.") : BadRequest("Failed to delete the job.");
         }
 
+        /// <summary>
+        /// Enqueues a job and schedules a notification to be sent after it completes.
+        /// </summary>
         [HttpPost("enqueue/withnotification")]
         public IActionResult EnqueueJobWithNotification()
         {
@@ -103,3 +131,4 @@ namespace hangfire.web.api.v1.Controllers
         }
     }
 }
+
