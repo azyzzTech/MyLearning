@@ -9,13 +9,19 @@ namespace middleware.web.api.v1.RateLimiters
         private readonly int _maxRequests;
         private static ConcurrentDictionary<string, (int Count, DateTime WindowStart)> _clients = new ConcurrentDictionary<string, (int, DateTime)>();
 
-        public FixedWindow(RequestDelegate @delegate, TimeSpan @windowSize, int @maxRequests)
+        public FixedWindow(RequestDelegate @delegate, TimeSpan windowSize, int maxRequests)
         {
             _delegate = @delegate;
-            _windowSize = @windowSize;
-            _maxRequests = @maxRequests;
+            _windowSize = windowSize;
+            _maxRequests = maxRequests;
         }
 
+        /// <summary>
+        /// Middleware that applies fixed window rate limiting based on client IP address.
+        /// Limits the number of requests a client can make within a specified time window.
+        /// </summary>
+        /// <param name="context">The HttpContext of the current request.</param>
+        /// <returns>A Task that represents the completion of request processing.</returns>
         public async Task InvokeAsync(HttpContext context)
         {
             var clientIp = context.Connection.RemoteIpAddress?.ToString();
