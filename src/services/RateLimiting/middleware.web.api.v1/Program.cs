@@ -28,6 +28,9 @@ app.MapControllers();
 //app.UseMiddleware<FixedWindow>(5, TimeSpan.FromMinutes(1));
 
 // Sliding window Middleware Technique
-app.UseMiddleware<SlidingWindow>(5, TimeSpan.FromMinutes(1));
+//app.UseMiddleware<SlidingWindow>(5, TimeSpan.FromMinutes(1));
+
+// TokenBucket Middleware Technique
+app.UseMiddleware<TokenBucket>(10, TimeSpan.FromSeconds(1));
 
 app.Run();

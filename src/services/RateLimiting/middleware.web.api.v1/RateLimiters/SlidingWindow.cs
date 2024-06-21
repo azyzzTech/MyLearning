@@ -4,14 +4,14 @@ namespace middleware.web.api.v1.RateLimiters
 {
     public class SlidingWindow
     {
-        private readonly RequestDelegate _next;
+        private readonly RequestDelegate _delegate;
         private readonly int _maxRequests;
         private readonly TimeSpan _windowSize;
         private static ConcurrentDictionary<string, ClientData> _clients = new ConcurrentDictionary<string, ClientData>();
 
-        public SlidingWindow(RequestDelegate next, int maxRequests, TimeSpan windowSize)
+        public SlidingWindow(RequestDelegate @delegate, int maxRequests, TimeSpan windowSize)
         {
-            _next = next;
+            _delegate = @delegate;
             _maxRequests = maxRequests;
             _windowSize = windowSize;
         }
@@ -28,7 +28,7 @@ namespace middleware.web.api.v1.RateLimiters
 
             if (clientId == null)
             {
-                await _next(context);
+                await _delegate(context);
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace middleware.web.api.v1.RateLimiters
                 clientData.Semaphore.Release();
             }
 
-            await _next(context);
+            await _delegate(context);
         }
 
         private class ClientData
