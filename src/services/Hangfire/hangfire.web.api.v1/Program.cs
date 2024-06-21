@@ -16,7 +16,7 @@ builder.Services.AddHangfire(config =>
     .UseMemoryStorage());
 
 // Hangfire Job Filter
-GlobalJobFilters.Filters.Add(new LogJobFilter());
+GlobalJobFilters.Filters.Add(new JobsLogFilter());
 
 // Adding Hangfire Server
 builder.Services.AddHangfireServer();
