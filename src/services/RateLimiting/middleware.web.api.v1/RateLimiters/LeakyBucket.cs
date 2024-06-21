@@ -3,6 +3,20 @@ using System.Threading;
 
 namespace middleware.web.api.v1.RateLimiters
 {
+    /// <summary>
+    /// Implements the Leaky Bucket algorithm for rate limiting.
+    /// 
+    /// The Leaky Bucket algorithm is a rate limiting technique where incoming requests
+    /// are treated like water drops added to a bucket. The bucket has a maximum capacity
+    /// and a leak rate. Requests are accepted if the bucket has available capacity. The
+    /// leak rate determines how quickly the bucket empties over time, ensuring that the
+    /// system can maintain a steady rate of processing requests.
+    /// 
+    /// Key components:
+    /// - Bucket Capacity: Maximum number of requests the bucket can hold at any time.
+    /// - Leak Rate: Rate at which the bucket leaks or drains over time.
+    /// - Semaphore: Ensures thread safety when accessing the bucket to prevent race conditions.
+    /// </summary>
     public class LeakyBucket
     {
         private readonly RequestDelegate _delegate;

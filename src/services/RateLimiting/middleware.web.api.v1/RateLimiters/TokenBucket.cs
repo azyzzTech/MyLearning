@@ -3,6 +3,19 @@ using System.Net.Sockets;
 
 namespace middleware.web.api.v1.RateLimiters
 {
+    /// <summary>
+    /// Implements the Token Bucket algorithm for rate limiting.
+    /// 
+    /// The Token Bucket algorithm is a rate limiting technique where tokens (representing
+    /// requests) are added to a bucket at a specified rate. Each incoming request must 
+    /// consume a token from the bucket. If the bucket is empty, further requests are 
+    /// rejected until new tokens are added according to the refill rate.
+    /// 
+    /// Key components:
+    /// - Bucket Capacity: Maximum number of tokens (requests) the bucket can hold at any time.
+    /// - Refill Rate: Rate at which tokens (requests) are added to the bucket.
+    /// - Semaphore: Ensures thread safety when accessing the bucket to prevent race conditions.
+    /// </summary>
     public class TokenBucket
     {
         private readonly RequestDelegate _delegate;
@@ -17,12 +30,6 @@ namespace middleware.web.api.v1.RateLimiters
             _refillInterval = refillInterval;
         }
 
-        /// <summary>
-        /// Middleware that applies token bucket rate limiting based on client IP address.
-        /// Limits the number of requests a client can make within a specified interval.
-        /// </summary>
-        /// <param name="context">The HttpContext of the current request.</param>
-        /// <returns>A Task that represents the completion of request processing.</returns>
         public async Task InvokeAsync(HttpContext context)
         {
             var clientId = context.Connection.RemoteIpAddress?.ToString();

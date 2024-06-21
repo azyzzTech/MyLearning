@@ -2,6 +2,20 @@
 
 namespace middleware.web.api.v1.RateLimiters
 {
+    /// <summary>
+    /// Implements the Sliding Window algorithm for rate limiting.
+    /// 
+    /// The Sliding Window algorithm is a rate limiting technique that divides time into
+    /// fixed intervals (windows) and counts the number of requests made within each window.
+    /// Requests are accepted if the count does not exceed a specified threshold within 
+    /// the current window. The window slides over time, allowing for a dynamic control 
+    /// of request rates.
+    /// 
+    /// Key components:
+    /// - Window Size: The duration of each sliding window interval.
+    /// - Max Requests: The maximum number of requests allowed per sliding window interval.
+    /// - ClientData: Stores request timestamps and counts per client for rate limiting.
+    /// </summary>
     public class SlidingWindow
     {
         private readonly RequestDelegate _delegate;
@@ -16,12 +30,6 @@ namespace middleware.web.api.v1.RateLimiters
             _windowSize = windowSize;
         }
 
-        /// <summary>
-        /// Middleware that applies sliding window rate limiting based on client IP address.
-        /// Limits the number of requests a client can make within a specified time window.
-        /// </summary>
-        /// <param name="context">The HttpContext of the current request.</param>
-        /// <returns>A Task that represents the completion of request processing.</returns>
         public async Task InvokeAsync(HttpContext context)
         {
             var clientId = context.Connection.RemoteIpAddress?.ToString();
