@@ -30,7 +30,10 @@ app.MapControllers();
 // Sliding window Middleware Technique
 //app.UseMiddleware<SlidingWindow>(5, TimeSpan.FromMinutes(1));
 
-// TokenBucket Middleware Technique
-app.UseMiddleware<TokenBucket>(10, TimeSpan.FromSeconds(1));
+// Token Bucket Middleware Technique
+//app.UseMiddleware<TokenBucket>(10, TimeSpan.FromSeconds(1));
+
+// Leaky Bucket Middleware Technique
+app.UseMiddleware<LeakyBucket>(10, TimeSpan.FromSeconds(1));
 
 app.Run();

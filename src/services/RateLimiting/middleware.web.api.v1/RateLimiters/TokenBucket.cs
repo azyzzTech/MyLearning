@@ -8,7 +8,7 @@ namespace middleware.web.api.v1.RateLimiters
         private readonly RequestDelegate _delegate;
         private readonly int _bucketCapacity;
         private readonly TimeSpan _refillInterval;
-        private static ConcurrentDictionary<string, Bucket> _buckets = new ConcurrentDictionary<string, Bucket>();
+        private static ConcurrentDictionary<string, BucketToken> _buckets = new ConcurrentDictionary<string, BucketToken>();
 
         public TokenBucket(RequestDelegate @delegate, int bucketCapacity, TimeSpan refillInterval)
         {
@@ -34,7 +34,7 @@ namespace middleware.web.api.v1.RateLimiters
             }
 
             var now = DateTime.UtcNow;
-            var bucket = _buckets.GetOrAdd(clientId, _ => new Bucket(_bucketCapacity, _refillInterval));
+            var bucket = _buckets.GetOrAdd(clientId, _ => new BucketToken(_bucketCapacity, _refillInterval));
 
             await bucket.Semaphore.WaitAsync();
 
@@ -61,7 +61,7 @@ namespace middleware.web.api.v1.RateLimiters
         }
     }
 
-    public class Bucket
+    public class BucketToken
     {
         public int Tokens { get; set; }
         public DateTime LastRefill { get; private set; }
@@ -69,7 +69,7 @@ namespace middleware.web.api.v1.RateLimiters
         private readonly int _bucketCapacity;
         private readonly TimeSpan _refillInterval;
 
-        public Bucket(int bucketCapacity, TimeSpan refillInterval)
+        public BucketToken(int bucketCapacity, TimeSpan refillInterval)
         {
             _bucketCapacity = bucketCapacity;
             _refillInterval = refillInterval;
